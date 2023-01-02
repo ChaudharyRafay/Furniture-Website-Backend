@@ -13,10 +13,31 @@ import auth from "../middleware/auth.js";
 
 /**
  * @swagger
- * /api/productInCart/remove/{id}:
+ * /api/paymentDetails/add:
  *   put:
  *     summary:  Add Payment Method from user
  *     tags: [ Add Payment Method]
+ *     parameters:
+ *          - in: path
+ *            name: paymentMethod
+ *            description: Choose the payment method ('Visa', 'Master', 'COD')
+ *            required : true
+ *          - in: path
+ *            name: userId
+ *            description: Registered User id
+ *            required : true
+ *          - in: path
+ *            name: city
+ *            description: User City
+ *            required : true
+ *          - in: path
+ *            name: postalCode
+ *            description: User City Postal Code
+ *            required : true
+ *          - in: path
+ *            name: fullAddress
+ *            description: fullAddress of User
+ *            required : true
  *     responses:
  *       200:
  *         description: Payment Details added successfully

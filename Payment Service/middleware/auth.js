@@ -21,25 +21,23 @@ dotenv.config();
 // }
 
 const auth = catchAsync(async (req, res, next) => {
-    console.log(req.headers);
-    if (req.headers["authorization"]) {
-
-        let authorization = req.headers["authorization"].split(" ");
-        if (authorization[0] !== "Bearer") {
-            throw new Error("Bearer Missing in token");
-        } else {
-            req.jwt = jwt.verify(authorization[1], process.env.SECRET);
-            console.log(req.jwt);
-            return next();
-        }
+  console.log(req.headers);
+  if (req.headers["authorization"]) {
+    let authorization = req.headers["authorization"].split(" ");
+    if (authorization[0] !== "Bearer") {
+      throw new Error("Bearer Missing in token");
+    } else {
+      req.jwt = jwt.verify(authorization[1], process.env.SECRET);
+      console.log(req.jwt);
+      return next();
     }
-    else {
-        throw new Error("Token Not Found");
-    }
-    // console.log(err);
-    // throw new Error(err);
-})
-// } 
+  } else {
+    throw new Error("Token Not Found");
+  }
+  // console.log(err);
+  // throw new Error(err);
+});
+// }
 // });
 
 export default auth;

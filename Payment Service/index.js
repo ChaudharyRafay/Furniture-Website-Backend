@@ -65,24 +65,6 @@ const options = {
             FullAddress: "Defense Pakistan",
           },
         },
-        AddProductInCart: {
-          type: "object",
-          required: ["cartId", "productId"],
-          properties: {
-            cartId: {
-              type: "string",
-              description: "Cart Id",
-            },
-            productId: {
-              type: "string",
-              description: "Product Id",
-            },
-          },
-          example: {
-            cartId: "22kj2k12121212121k2",
-            productId: "1d1opi1uy2h2rf121k2g1f21kp21",
-          },
-        },
       },
       responses: {
         // 400: {
@@ -98,17 +80,19 @@ const options = {
           contents: "application/json",
         },
       },
-      // securitySchemes: {
-      //     ApiKeyAuth: {
-      //         type: 'apiKey',
-      //         in: 'header',
-      //         name: 'Authorization'
-      //     }
-      //   }
+      securitySchemes: {
+        ApiKeyAuth: {
+          type: "apiKey",
+          in: "header",
+          name: "Authorization",
+        },
+      },
     },
-    //   security: [{
-    //     ApiKeyAuth: []
-    //   }]
+    security: [
+      {
+        ApiKeyAuth: [],
+      },
+    ],
   },
   apis: ["./routes/*.js"],
 };
