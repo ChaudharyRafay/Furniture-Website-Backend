@@ -7,22 +7,32 @@ import {
   delCartProducts,
 } from "../controllers/productInCartController.js";
 import auth from "../middleware/auth.js";
+
 /**
  * @swagger
  * tags:
  *   name: Add product
- *   description: Get product from shoping cart
+ *   description: Add product from shoping cart
  */
 
 /**
  * @swagger
- * /api/productInCart/get/{id}:
- *   get:
- *     summary: Add product in shoping cart
+ * /api/productInCart/add:
+ *   put:
+ *     summary: Add product from shoping cart
  *     tags: [Add product]
+ *     parameters:
+ *          - in: path
+ *            name: cartId
+ *            description: Write the cartId
+ *            required : true
+ *          - in: path
+ *            name: productId
+ *            description: Write the productId
+ *            required : true
  *     responses:
  *       200:
- *         description:Add product in shoping cart
+ *         description: Products found from shoping cart
  *         content:
  *           application/json:
  *             schema:
@@ -40,10 +50,18 @@ route.put("/add", auth, add);
 
 /**
  * @swagger
- * /api/productInCart/get/{id}:
+ * /api/productInCart/get/:id:
  *   get:
  *     summary: Get product from shoping cart
  *     tags: [Get product]
+ *     parameters:
+ *          - in: path
+ *            name: id
+ *            description: Write the productId
+ *            required : true
+ *            schema:
+ *             type:string
+ *
  *     responses:
  *       200:
  *         description: Products found from shoping cart
@@ -68,6 +86,15 @@ route.get("/get/:id", auth, get);
  *   delete:
  *     summary:  Delete product from shoping cart
  *     tags: [ Delete product]
+ *     parameters:
+ *          - in: body
+ *            name: Product Id
+ *            description: Write the productId
+ *            required : true
+ *            schema:
+ *            properties:
+ *            myParam:
+ *            type: string
  *     responses:
  *       200:
  *         description: Product removed from cart successfully
@@ -93,6 +120,15 @@ route.delete("/remove/:id", auth, del);
  *   delete:
  *     summary:  Delete All Products from shoping cart
  *     tags: [ Delete All Products]
+ *     parameters:
+ *          - in: body
+ *            name: User Id
+ *            description: Write the UserId
+ *            required : true
+ *            schema:
+ *            properties:
+ *            myParam:
+ *            type: string
  *     responses:
  *       200:
  *         description: All Product removed from cart successfully

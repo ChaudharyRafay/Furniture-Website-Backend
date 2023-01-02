@@ -14,6 +14,11 @@ import { create, getCardId } from "../controllers/shoppingCartController.js";
  *   put:
  *     summary: Create User Shoping Cart
  *     tags: [User Shoping Cart]
+ *     parameters:
+ *          - in: path
+ *            name: UserId
+ *            description: Gives the UserId
+ *            required : true
  *     responses:
  *       200:
  *         description: Shopping cart created successfully
@@ -38,6 +43,13 @@ route.put("/create", create);
  *   get:
  *     summary: get User Shoping Cart
  *     tags: [Users Shoping Cart]
+ *     parameters:
+ *          - in: path
+ *            name: User Id
+ *            description: Write the user Id to find the shoping cart
+ *            required : true
+ *            schema:
+ *              type: string
  *     responses:
  *       200:
  *         description: Shopping cart found
