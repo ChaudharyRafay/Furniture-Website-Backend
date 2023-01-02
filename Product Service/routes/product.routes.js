@@ -61,6 +61,19 @@ route.get("/updateCountInc/:id", updateCountInc);
  *   put:
  *     summary: Add Product into Database
  *     tags: [Upload Product]
+ *     parameters:
+ *          - in: path
+ *            name: Name of Product
+ *            description: Name of Product that shown in our website
+ *            required : true
+ *          - in: path
+ *            name: price
+ *            description: Price of the product
+ *            required : true
+ *          - in: path
+ *            name: StockQuantity
+ *            description: StockQuantity of the product
+ *            required : true
  *     responses:
  *       200:
  *         description: Product added successfully
@@ -92,6 +105,16 @@ route.put("/update", auth, update);
  *   post:
  *     summary: Upload  Product Images
  *     tags: [Upload Product Images]
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *              # 'file' will be the field name in this multipart request
+ *                product-images:
+ *                  type: string
+ *                  format: binary
  *     responses:
  *       200:
  *         description: Images Uploaded successfully
