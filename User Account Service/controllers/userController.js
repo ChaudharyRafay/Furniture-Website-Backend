@@ -1,11 +1,10 @@
-
 import Users from "../models/userModel.js";
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 import catchAsync from "../utils/catchAsync.js";
 import jwt from "jsonwebtoken";
 import { hash, check } from "../utils/crypt.js";
-import bcrypt from "bcrypt"
-const { hashSync } = bcrypt
+import bcrypt from "bcrypt";
+const { hashSync } = bcrypt;
 import { config } from "dotenv";
 import NodeRSA from "node-rsa";
 import userModel from "../models/userModel.js";
@@ -13,109 +12,104 @@ config();
 
 //Login
 export const login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-
-
-
-
-    const user = await Users.findOne({ email });
-    if (!user) return res.status(400).json({
-        success: false,
-        status: 400,
-        message: "Incorrect Email"
-    })
-
-    if (!check(password, user.password))
-        return res.status(400).json({
-            success: false,
-            status: 400,
-            message: "Incorrect Password"
-        });
-    var refreshToken = jwt.sign({ "userId": user._id }, process.env.REFRESHSECRET);
-
-    var token = jwt.sign({ "userId": user._id }, process.env.SECRET, { expiresIn: '30s' });
-    const data = await userModel.updateOne({ _id: user._id }, { refreshToken: refreshToken })
-    console.log(token);
-    console.log(data);
-    return res.json({
-        success: true,
-        status: 200,
-        message: "User logged in successfully",
-        user: {
-            id: user._id,
-            email: user.email,
-            name: user.fullName,
-            token: token,
-            refreshToken: refreshToken
-
-
-        },
+  const user = await Users.findOne({ email });
+  if (!user)
+    return res.status(400).json({
+      success: false,
+      status: 400,
+      message: "Incorrect Email",
     });
+
+  if (!check(password, user.password))
+    return res.status(400).json({
+      success: false,
+      status: 400,
+      message: "Incorrect Password",
+    });
+  var refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESHSECRET);
+
+  var token = jwt.sign({ userId: user._id }, process.env.SECRET, {
+    expiresIn: "1h",
+  });
+  const data = await userModel.updateOne(
+    { _id: user._id },
+    { refreshToken: refreshToken }
+  );
+  console.log(token);
+  console.log(data);
+  return res.json({
+    success: true,
+    status: 200,
+    message: "User logged in successfully",
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.fullName,
+      token: token,
+      refreshToken: refreshToken,
+    },
+  });
 });
 
 //Add
 export const newToken = catchAsync(async (req, res) => {
-
-    const data = await userModel.findOne({ refreshToken: req.body.refreshToken });
-    console.log("called");
-    if (data) {
-        var token = jwt.sign({ "userId": data._id }, process.env.SECRET, { expiresIn: '30s' });
-
-        return res.json({
-            success: true,
-            status: 200,
-            token: token
-        })
-    }
-
-    else {
-        return res.json({
-            success: false,
-            status: 500,
-            message: "Access Token not found"
-        })
-    }
-
-
-})
-export const add = catchAsync(async (req, res, next) => {
-    console.log(req.body);
-    const isEmailUnique = await checkEmail(req.body.email);
-    // console.log(isEmailUnique);
-    if (!isEmailUnique) return res.json({
-        success: false,
-        status: 400,
-        message: "Email already exists"
-    })
-
-    const userData = JSON.parse(JSON.stringify(req.body))
-
-    userData.password = hashSync(userData.password, 10)
-
-    const user = await Users.create(userData);
-    if (!user) {
-        return res.json({
-            success: false,
-            status: 500,
-            message: "User could not be added"
-        })
-    }
-
-
+  const data = await userModel.findOne({ refreshToken: req.body.refreshToken });
+  console.log("called");
+  if (data) {
+    var token = jwt.sign({ userId: data._id }, process.env.SECRET, {
+      expiresIn: "30s",
+    });
 
     return res.json({
-        success: true,
-        status: 200,
-        message: "User signed up successfully",
-        user: {
-            id: user._id,
-            email: user.email,
-            name: user.name,
-            // name: `${user.firstName} ${user.lastName}`,
-
-        },
+      success: true,
+      status: 200,
+      token: token,
     });
+  } else {
+    return res.json({
+      success: false,
+      status: 500,
+      message: "Access Token not found",
+    });
+  }
+});
+export const add = catchAsync(async (req, res, next) => {
+  console.log(req.body);
+  const isEmailUnique = await checkEmail(req.body.email);
+  // console.log(isEmailUnique);
+  if (!isEmailUnique)
+    return res.json({
+      success: false,
+      status: 400,
+      message: "Email already exists",
+    });
+
+  const userData = JSON.parse(JSON.stringify(req.body));
+
+  userData.password = hashSync(userData.password, 10);
+
+  const user = await Users.create(userData);
+  if (!user) {
+    return res.json({
+      success: false,
+      status: 500,
+      message: "User could not be added",
+    });
+  }
+
+  return res.json({
+    success: true,
+    status: 200,
+    message: "User signed up successfully",
+    user: {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      // name: `${user.firstName} ${user.lastName}`,
+    },
+  });
 });
 
 // const updateUser = async (id, user) => {
@@ -186,21 +180,22 @@ export const add = catchAsync(async (req, res, next) => {
 
 //Get One
 export const get = catchAsync(async (req, res, next) => {
-    const user = await getUser({
-        _id: mongoose.Types.ObjectId(req.params.id)
-    });
-    if (!user) return res.json({
-        success: false,
-        status: 404,
-        message: "User not found"
-    })
-
+  const user = await getUser({
+    _id: mongoose.Types.ObjectId(req.params.id),
+  });
+  if (!user)
     return res.json({
-        success: true,
-        status: 200,
-        message: "User found",
-        user,
+      success: false,
+      status: 404,
+      message: "User not found",
     });
+
+  return res.json({
+    success: true,
+    status: 200,
+    message: "User found",
+    user,
+  });
 });
 
 //Delete
@@ -229,45 +224,40 @@ export const get = catchAsync(async (req, res, next) => {
 //     });
 // });
 
-
-
 export const uploadPfp = catchAsync(async (req, res) => {
-    if (!req.file) res.json({
-        success: false,
-        message: "Profile Picture not uploaded."
+  if (!req.file)
+    res.json({
+      success: false,
+      message: "Profile Picture not uploaded.",
     });
 
-    const pfp = req.file.path;
-    res.json({ success: true, message: "Profile Picture Uploaded", pfp });
-})
+  const pfp = req.file.path;
+  res.json({ success: true, message: "Profile Picture Uploaded", pfp });
+});
 
 async function checkEmail(email) {
-    let result = await Users.find({ email });
-    console.log(result);
-    return !result.length;
+  let result = await Users.find({ email });
+  console.log(result);
+  return !result.length;
 }
 
 async function getUsers(query = null) {
-    let users = [];
-    if (query) {
-        users = await Users.aggregate(
-            [
-                {
-                    $match: { ...query },
-                },
-            ]
-        )
-    } else users = await Users.find()
+  let users = [];
+  if (query) {
+    users = await Users.aggregate([
+      {
+        $match: { ...query },
+      },
+    ]);
+  } else users = await Users.find();
 
-    return users;
+  return users;
 }
 
 async function getUser(query) {
-    const users = await getUsers(query);
-    return users[0];
+  const users = await getUsers(query);
+  return users[0];
 }
-
-
 
 // const { email, password } = req.body;
 
@@ -297,8 +287,6 @@ async function getUser(query) {
 //         message: "Incorrect Password"
 //     });
 
-
-
 // return res.json({
 //     success: true,
 //     status: 200,
@@ -308,7 +296,6 @@ async function getUser(query) {
 //         email: user.email,
 //         name: user.fullName,
 //         token: token,
-
 
 //     },
 // });

@@ -36,6 +36,23 @@ import imageUploader from "../utils/profilePictureUploader.js";
  *   put:
  *     summary: Add User
  *     tags: [Add user]
+ *     parameters:
+ *          - in: path
+ *            name: fullName
+ *            description: Fullname of the User
+ *            required : true
+ *          - in: path
+ *            name: email
+ *            description: Email of the User
+ *            required : true
+ *          - in: path
+ *            name: password
+ *            description: Password
+ *            required : true
+ *          - in: path
+ *            name: phoneNo
+ *            description: User phoneno
+ *            required : true
  *     responses:
  *       200:
  *         description: User signed up successfully
@@ -61,6 +78,15 @@ route.put("/add", add);
  *   post:
  *     summary: User login the website
  *     tags: [Login user]
+ *     parameters:
+ *          - in: path
+ *            name: email
+ *            description: Registerede email of the user
+ *            required : true
+ *          - in: path
+ *            name: password
+ *            description: Password
+ *            required : true
  *     responses:
  *       200:
  *         description: User logged in successfully
