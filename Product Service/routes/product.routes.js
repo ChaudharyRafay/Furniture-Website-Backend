@@ -59,7 +59,7 @@ route.get("/updateCountInc/:id", updateCountInc);
  * @swagger
  * /api/product/add:
  *   put:
- *     summary: Add Product into Database
+ *     summary: Add Product into Database -> You must execute upload image api before this api
  *     tags: [Upload Product]
  *     parameters:
  *          - in: path
@@ -73,6 +73,10 @@ route.get("/updateCountInc/:id", updateCountInc);
  *          - in: path
  *            name: StockQuantity
  *            description: StockQuantity of the product
+ *            required : true
+ *          - in: path
+ *            name: Image path name
+ *            description: Image full path name
  *            required : true
  *     responses:
  *       200:

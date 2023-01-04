@@ -44,29 +44,24 @@ const options = {
           type: "object",
           required: ["id", "name", "price", "stockQuantity", "image"],
           properties: {
-            id: {
-              type: "string",
-              description: "The author of the book",
-            },
             price: {
               type: "integer",
-              description: "The price of the book",
+              description: "The price of the Product",
             },
             name: {
               type: "string",
-              description: "The description of the book",
+              description: "The description of the Product",
             },
             stockQuantity: {
               type: "integer",
-              description: "The year the book was published",
+              description: "Total Product Quantity",
             },
             image: {
-              type: "integer",
-              description: "The year the book was published",
+              type: "string",
+              description: "Product Images",
             },
           },
           example: {
-            id: "12j1h2j1k",
             price: 199,
             name: "rafay",
             stockQuantity: 5,
@@ -77,17 +72,12 @@ const options = {
           type: "object",
           required: ["id", "image"],
           properties: {
-            id: {
-              type: "string",
-              description: "The author of the book",
-            },
             image: {
               type: "string",
               description: "Product Images",
             },
           },
           example: {
-            id: "12j1h2j1k",
             image: "rafay.png",
           },
         },
